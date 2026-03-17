@@ -1,0 +1,13 @@
+<template>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
+</template>
+
+<style>
+body {
+  background-color: #09090b;
+  color: #fafafa;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+</style>
