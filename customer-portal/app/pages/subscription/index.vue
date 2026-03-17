@@ -40,9 +40,15 @@ onMounted(async () => {
       const plansData = await apiFetch<{ content: Plan[] }>(`/api/v1/admin/plans?tenantId=${tenantId}&page=0&size=20`)
       plans.value = plansData.content.filter(p => p.isActive)
 
-      const subsData = await apiFetch<{ content: Subscription[] }>(`/api/v1/admin/subscriptions?tenantId=${tenantId}&page=0&size=1`)
+      const subsData = await apiFetch<{ content: Subscription[] }>(`/api/v1/admin/subscriptions?tenantId=${tenantId}&status=ACTIVE&page=0&size=10`)
       if (subsData.content.length > 0) {
         subscription.value = subsData.content[0]
+      } else {
+        // Check for trialing subscriptions too
+        const trialData = await apiFetch<{ content: Subscription[] }>(`/api/v1/admin/subscriptions?tenantId=${tenantId}&status=TRIALING&page=0&size=10`)
+        if (trialData.content.length > 0) {
+          subscription.value = trialData.content[0]
+        }
       }
     }
   } catch (err) {
@@ -74,6 +80,10 @@ async function cancelSubscription() {
     <h2 class="text-lg font-semibold text-white">My Subscription</h2>
 
     <div v-if="loading" class="text-zinc-500">Loading...</div>
+
+    <div v-else-if="error" class="bg-red-900/20 border border-red-800 rounded-xl p-4 text-red-400 text-sm">
+      {{ error }}
+    </div>
 
     <div v-else-if="subscription" class="space-y-6">
       <!-- Current Plan Card -->
