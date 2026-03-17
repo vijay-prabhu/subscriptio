@@ -116,6 +116,7 @@ public class Invoice extends BaseEntity {
     public BigDecimal getTax() { return tax; }
     public BigDecimal getTotal() { return total; }
     public String getCurrency() { return currency; }
+    public void setCurrency(String currency) { this.currency = currency; }
     public Instant getDueDate() { return dueDate; }
     public Instant getPaidAt() { return paidAt; }
     public Instant getPeriodStart() { return periodStart; }
