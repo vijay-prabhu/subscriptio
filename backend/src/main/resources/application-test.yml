@@ -1,0 +1,16 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
+app:
+  jwt:
+    secret: test-secret-key-for-testing-only-must-be-at-least-256-bits-long-for-hmac
+    expiration-ms: 900000
+    refresh-expiration-ms: 604800000
+  stripe:
+    api-key: sk_test_placeholder
+    webhook-secret: whsec_test_placeholder
+    publishable-key: pk_test_placeholder
