@@ -87,6 +87,26 @@ for i in $(seq 1 15); do
   sleep 2
 done
 
+# ─── 5. Analytics Service — Python FastAPI (port 8081) ────────────────
+log "Starting Analytics Service (FastAPI)..."
+cd "$PROJECT_ROOT/analytics-service"
+if [ -d ".venv" ]; then
+  source .venv/bin/activate
+  uvicorn app.main:app --port 8081 --host 0.0.0.0 > "$LOG_DIR/analytics.log" 2>&1 &
+  echo "$!" >> "$PID_FILE"
+  deactivate 2>/dev/null || true
+
+  for i in $(seq 1 10); do
+    if curl -sf http://localhost:8081/health > /dev/null 2>&1; then
+      ok "Analytics Service ready → http://localhost:8081"
+      break
+    fi
+    sleep 2
+  done
+else
+  warn "Analytics venv not found. Run: cd analytics-service && python3 -m venv .venv && source .venv/bin/activate && pip install -e '.[dev]'"
+fi
+
 # ─── Summary ─────────────────────────────────────────────────────────
 echo ""
 echo -e "${GREEN}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
@@ -97,6 +117,7 @@ echo "  PostgreSQL        → localhost:5432"
 echo "  Redis             → localhost:6379"
 echo "  Mailhog UI        → http://localhost:8025"
 echo "  Backend API       → http://localhost:8080"
+echo "  Analytics API     → http://localhost:8081"
 echo "  Admin Dashboard   → http://localhost:3000"
 echo "  Customer Portal   → http://localhost:3001"
 echo ""

@@ -28,6 +28,7 @@ pkill -f "next dev" 2>/dev/null || true
 pkill -f "next-server" 2>/dev/null || true
 pkill -f "nuxi" 2>/dev/null || true
 pkill -f "nuxt" 2>/dev/null || true
+pkill -f "uvicorn app.main:app" 2>/dev/null || true
 
 ok "App processes stopped"
 
